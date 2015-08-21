@@ -31,9 +31,15 @@
 @property (weak, nonatomic, readonly) UIScrollView *scrollView;
 
 /**
+ The indicator width
+ */
+@property (assign, nonatomic) CGFloat indicatorWidth;
+
+/**
  The designated initializer.
  */
 - (instancetype)initWithScrollView:(UIScrollView *)scrollView;
+
 
 /**
  Forces a reset if something has caused the indicator to get into 

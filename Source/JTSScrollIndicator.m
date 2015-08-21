@@ -26,12 +26,18 @@ static UIEdgeInsets JTSScrollIndicator_InherentInset;
 
 #pragma mark - Public
 
+- (void)setIndicatorWidth(CGFloat) indicatorWidth{
+    self.indicatorWidth = indicatorWidth;
+    self.layer.cornerRadius = self.indicatorWidth * 0.75;
+}
+
 - (instancetype)initWithScrollView:(UIScrollView *)scrollView {
     CGRect startingFrame = CGRectZero;
     self = [super initWithFrame:startingFrame];
     if (self) {
         _scrollView = scrollView;
-        self.layer.cornerRadius = JTSScrollIndicator_IndicatorWidth * 0.75;
+        self.indicatorWidth = JTSScrollIndicator_IndicatorWidth;
+        self.layer.cornerRadius = self.indicatorWidth * 0.75;
         self.clipsToBounds = YES;
         self.alpha = 0;
         _shouldHide = YES;
@@ -79,8 +85,8 @@ static UIEdgeInsets JTSScrollIndicator_InherentInset;
     CGFloat contentHeightWithInsets = contentHeight + contentInset.top + contentInset.bottom;
     CGFloat frameHeightWithoutScrollIndicatorInsets = (frameHeight - indicatorInsets.top - indicatorInsets.bottom - JTSScrollIndicator_InherentInset.top);
     
-    underlyingRect.size.width = JTSScrollIndicator_IndicatorWidth;
-    underlyingRect.origin.x = scrollView.frame.size.width - JTSScrollIndicator_IndicatorWidth - JTSScrollIndicator_IndicatorRightMargin;
+    underlyingRect.size.width = self.indicatorWidth;
+    underlyingRect.origin.x = scrollView.frame.size.width - self.indicatorWidth - JTSScrollIndicator_IndicatorRightMargin;
     
     CGFloat ratio = (contentHeightWithInsets != 0) ? frameHeightWithoutScrollIndicatorInsets / contentHeightWithInsets : 1.0f;
     
