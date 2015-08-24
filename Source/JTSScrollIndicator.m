@@ -8,7 +8,7 @@
 
 #import "JTSScrollIndicator.h"
 
-static CGFloat JTSScrollIndicator_IndicatorWidth = 2.5f;
+static CGFloat JTSScrollIndicator_IndicatorWidth;
 static CGFloat JTSScrollIndicator_MinIndicatorHeightWhenCompressed = 8.0f;
 static CGFloat JTSScrollIndicator_MinIndicatorHeightWhenScrolling = 37.0f;
 static CGFloat JTSScrollIndicator_IndicatorRightMargin = 2.5f;
@@ -26,26 +26,26 @@ static UIEdgeInsets JTSScrollIndicator_InherentInset;
 
 #pragma mark - Public
 
-- (void)setIndicatorWidth(CGFloat) indicatorWidth{
-    self.indicatorWidth = indicatorWidth;
-    self.layer.cornerRadius = self.indicatorWidth * 0.75;
-}
-
-- (instancetype)initWithScrollView:(UIScrollView *)scrollView {
+- (instancetype)initWithScrollView:(UIScrollView *)scrollView  withWidth:(CGFloat)width {
     CGRect startingFrame = CGRectZero;
     self = [super initWithFrame:startingFrame];
     if (self) {
+        JTSScrollIndicator_IndicatorWidth = width;
         _scrollView = scrollView;
-        self.indicatorWidth = JTSScrollIndicator_IndicatorWidth;
-        self.layer.cornerRadius = self.indicatorWidth * 0.75;
+        self.layer.cornerRadius = JTSScrollIndicator_IndicatorWidth * 0.75;
         self.clipsToBounds = YES;
         self.alpha = 0;
         _shouldHide = YES;
         JTSScrollIndicator_InherentInset = UIEdgeInsetsMake(2.5, 0, 2.5, 0);
-        [scrollView addSubview:self];
+        [scrollView insertSubview:self atIndex:0];
         [self reset];
     }
     return self;
+}
+
+
+- (instancetype)initWithScrollView:(UIScrollView *)scrollView {
+    return [self initWithScrollView:scrollView withWidth:2.5f];
 }
 
 - (void)setKeepHidden:(BOOL)keepHidden {
@@ -85,8 +85,8 @@ static UIEdgeInsets JTSScrollIndicator_InherentInset;
     CGFloat contentHeightWithInsets = contentHeight + contentInset.top + contentInset.bottom;
     CGFloat frameHeightWithoutScrollIndicatorInsets = (frameHeight - indicatorInsets.top - indicatorInsets.bottom - JTSScrollIndicator_InherentInset.top);
     
-    underlyingRect.size.width = self.indicatorWidth;
-    underlyingRect.origin.x = scrollView.frame.size.width - self.indicatorWidth - JTSScrollIndicator_IndicatorRightMargin;
+    underlyingRect.size.width = JTSScrollIndicator_IndicatorWidth;
+    underlyingRect.origin.x = scrollView.frame.size.width - JTSScrollIndicator_IndicatorWidth - JTSScrollIndicator_IndicatorRightMargin;
     
     CGFloat ratio = (contentHeightWithInsets != 0) ? frameHeightWithoutScrollIndicatorInsets / contentHeightWithInsets : 1.0f;
     
